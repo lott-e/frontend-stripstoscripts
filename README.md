@@ -15,14 +15,6 @@ You can use the `create-turbo` CLI to bootstrap your project using this template
 npx create-turbo@latest -e https://github.com/juliusmarminge/acme-corp
 ```
 
-## About
-
-This project features the next-generation stack for building fullstack application. It's structured as a monorepo with a shared API using tRPC. Built on the new app router in Next.js 13 with React Server Components.
-
-- For database querying, [Kysely](https://kysely.dev) is used as a query builder whilst remaining [Prisma](https://prisma.io) as a schema management tool. (This means it's fully edge-ready!). To keep a good DX, we use a custom setup with kysely-prisma-generator to pull out all the prisma types, and then a [post-generate script](./packages/db/prisma/postgenerate.ts) to create a fully typesafe db client using database.js from [PlanetScale](https://planetscale.com).
-- This project uses [Clerk](https://clerk.com) as it's authentication provider.
-- Awesome UI components from [shadcn/ui](https://ui.shadcn.com)
-
 ## References
 
 The stack originates from [create-t3-app](https://github.com/t3-oss/create-t3-app).
@@ -33,9 +25,32 @@ A [blog post](https://jumr.dev/blog/t3-turbo) where I wrote how to migrate a T3 
 
 <a href="https://cal.com/julius/quick-chat?utm_source=banner&utm_campaign=oss"><img alt="Book us with Cal.com" src="https://cal.com/book-with-cal-dark.svg" /></a>
 
-
-## Running repo 
+## Running repo
 
 ```
 pnpm run dev:web
 ```
+
+### Understanding Repo
+
+This project features the next-generation stack for building fullstack application. It's structured as a monorepo with a shared API using tRPC. Built on the new app router in Next.js 13 with React Server Components.
+
+Built from the template [by Julius Marminge](https://github.com/juliusmarminge/acme-corp)
+
+- For database querying, [Kysely](https://kysely.dev) is used as a query builder whilst remaining [Prisma](https://prisma.io) as a schema management tool. (This means it's fully edge-ready!). To keep a good DX, we use a custom setup with kysely-prisma-generator to pull out all the prisma types, and then a [post-generate script](./packages/db/prisma/postgenerate.ts) to create a fully typesafe db client using database.js from [PlanetScale](https://planetscale.com).
+- This project uses [Clerk](https://clerk.com) as it's authentication provider.
+- Awesome UI components from [shadcn/ui](https://ui.shadcn.com)
+
+[tRPC](https://trpc.io/docs/client/nextjs/setup) allows you to easily build & consume fully typesafe APIs without schemas or code generation.
+
+- An alternative to traditional REST or GraphQL
+- statically typed API endpoints, shared between client and server
+- this fires Prisma to PlanetScale
+- [NextJS integration](https://trpc.io/docs/client/nextjs)
+
+### CMS
+
+[PayloadCMS](https://payloadcms.com/)
+
+- opensource CMS
+- no usage limits

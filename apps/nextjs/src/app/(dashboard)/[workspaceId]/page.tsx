@@ -1,3 +1,10 @@
+import {
+  JSXElementConstructor,
+  PromiseLikeOfReactNode,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+} from "react";
 import Link from "next/link";
 
 import { ProjectTier } from "@acme/db/enums";
@@ -17,6 +24,7 @@ import { getRandomPatternStyle } from "~/lib/generate-pattern";
 import type { RouterOutputs } from "~/trpc/server";
 import { api } from "~/trpc/server";
 import { DashboardShell } from "../_components/dashboard-shell";
+import { fetchPages } from "../../cms";
 import { CreateProjectForm } from "./_components/create-project-form";
 
 export const runtime = "edge";
@@ -38,6 +46,10 @@ function ProjectTierIndicator(props: { tier: ProjectTier }) {
 export default async function Page(props: { params: { workspaceId: string } }) {
   const { projects, limitReached } =
     await api.project.listByActiveWorkspace.query();
+
+  const topics = await fetchPages();
+
+  console.log("topics", topics);
 
   return (
     <DashboardShell
@@ -65,6 +77,13 @@ export default async function Page(props: { params: { workspaceId: string } }) {
       }
     >
       <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {topics.map((topic) => (
+          <li key={topic.id}>
+            <TopicCard topic={topic} />
+          </li>
+        ))}
+      </ul>
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {projects.map((project) => (
           <li key={project.id}>
             <ProjectCard
@@ -74,7 +93,6 @@ export default async function Page(props: { params: { workspaceId: string } }) {
           </li>
         ))}
       </ul>
-
       {projects.length === 0 && (
         <div>
           <h2 className="text-xl font-semibold">No projects yet</h2>
@@ -84,6 +102,37 @@ export default async function Page(props: { params: { workspaceId: string } }) {
         </div>
       )}
     </DashboardShell>
+  );
+}
+
+function TopicCard(topic: {
+  id: string;
+  title:
+    | string
+    | number
+    | boolean
+    | ReactElement<any, string | JSXElementConstructor<any>>
+    | Iterable<ReactNode>
+    | ReactPortal
+    | PromiseLikeOfReactNode
+    | null
+    | undefined;
+}) {
+  console.log("topic", topic);
+  // const { project } = props;
+  return (
+    // <Link href={`/${props.workspaceId}/${project.id}`}>
+    <Card className="overflow-hidden">
+      <div className="h-32" style={getRandomPatternStyle(topic.topic.id)} />
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>{topic.topic.title}</span>
+          {/* <ProjectTierIndicator tier={project.tier} /> */}
+        </CardTitle>
+        {/* <CardDescription>{project.url}&nbsp;</CardDescription> */}
+      </CardHeader>
+    </Card>
+    // </Link>
   );
 }
 
